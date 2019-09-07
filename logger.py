@@ -1,3 +1,4 @@
+import sys
 import asyncio
 import time
 
@@ -43,21 +44,22 @@ class Logger():
         logtext = "{TS}, {TXT}\n".format(TXT=text, TS=timestamp)
 
         print(logtext)
-        #f = open("logfile.csv", "a")
-        #f.write(logtext)
-        #f.close()
+        f = open("logfile.csv", "a")
+        f.write(logtext)
+        f.close()
 
 
     async def detect_rising_edge(self, PIN, future_timestamp):
-        await asyncio.sleep(2)
+        await self.run(self.cmd_detect_rising)
+        #await asyncio.sleep(2)
 
         # return the value asynchronously
         future_timestamp.set_result(time.time())
 
 
     async def detect_falling_edge(self, PIN, future_timestamp):
-        #GPIO.wait_for_edge(PIN, GPIO.FALLING)
-        await asyncio.sleep(4)
+        await self.run(self.cmd_detect_falling)
+        #await asyncio.sleep(4)
 
         # return the value asynchronously
         future_timestamp.set_result(time.time())
@@ -71,10 +73,12 @@ class Logger():
         # create task to detect edge and do something with result
         loop.create_task(self.detect_rising_edge(self.PIN, rising_edge))
         loop.create_task(self.detect_falling_edge(self.PIN, falling_edge))
-        
+       
+        # start the next cycle as soon as a rising edge is detected
         await rising_edge
         start_next_cycle.set_result(True)
-
+        
+        # logging
         await loop.create_task(self.on_rising_edge(await rising_edge))
         await loop.create_task(self.on_falling_edge(await falling_edge))
 
@@ -86,11 +90,11 @@ class Logger():
 
         stdout, stderr = await proc.communicate()
 
-        print(f'[{cmd!r} exited with {proc.returncode}]')
-        if stdout:
-            print(f'[stdout]\n{stdout.decode()}')
-        if stderr:
-            print(f'[stderr]\n{stderr.decode()}')
+        #print(f'[{cmd!r} exited with {proc.returncode}]')
+        #if stdout:
+        #    print(f'[stdout]\n{stdout.decode()}')
+        #if stderr:
+        #    print(f'[stderr]\n{stderr.decode()}')
 
 
 async def main():
@@ -102,15 +106,16 @@ async def main():
 
     loop = asyncio.get_event_loop()
 
-    for i in range(5):
-        start_next_cycle = loop.create_future()
-        loop.create_task(logger.detection_cycle(loop, start_next_cycle))
+    while True:
+            start_next_cycle = loop.create_future()
+            loop.create_task(logger.detection_cycle(loop, start_next_cycle))
 
-        await start_next_cycle
+            await start_next_cycle
 
-    
-    #loop.run_forever()
-    #loop.close()
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except (KeyboardInterrupt, SystemExit):
+        sys.exit(0)
+
