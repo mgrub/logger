@@ -17,3 +17,7 @@ requirements:
 # usage
 - run logger
 - insert usb-device, current logfile is automatically copied into a "logs"-folder on that drive
+
+
+# Author
+- Maximilian Gruber
