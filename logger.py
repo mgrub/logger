@@ -6,7 +6,7 @@ import time
 class Logger():
 
     def __init__(self, BCM_PIN=4):
-        self.bounce_time = 1  # seconds
+        self.bounce_time = 3  # seconds
 
         self.last_rising_edge = 0.0
         self.last_falling_edge = 0.0
@@ -15,7 +15,7 @@ class Logger():
         self.PIN = BCM_PIN
 
         # bare gpio-cli commands (-g --> use BCM-numbers)
-        self.cmd_enable_read    = "gpio -g mode {PIN} input".format(PIN=self.PIN)  # input/output/up/down/tri
+        self.cmd_enable_read    = "gpio -g mode {PIN} down".format(PIN=self.PIN)  # input/output/up/down/tri
         self.cmd_detect_rising  = "gpio -g wfi {PIN} rising".format(PIN=self.PIN)  # rising/falling/both
         self.cmd_detect_falling = "gpio -g wfi {PIN} falling".format(PIN=self.PIN)
         
@@ -41,7 +41,12 @@ class Logger():
 
 
     def write_to_logfile(self, text, timestamp):
-        logtext = "{TS}, {TXT}\n".format(TXT=text, TS=timestamp)
+
+        # human readable time, should be in local time
+        timestring = datetime.datetime.fromtimestamp(timestamp).astimezone().isoformat()
+
+        # combine information into a single string
+        logtext = "{TS}, {TIME}, {TXT}\n".format(TXT=text, TIME=timestring, TS=timestamp)
 
         print(logtext)
         f = open("logfile.csv", "a")
@@ -51,7 +56,6 @@ class Logger():
 
     async def detect_rising_edge(self, PIN, future_timestamp):
         await self.run(self.cmd_detect_rising)
-        #await asyncio.sleep(2)
 
         # return the value asynchronously
         future_timestamp.set_result(time.time())
@@ -59,7 +63,6 @@ class Logger():
 
     async def detect_falling_edge(self, PIN, future_timestamp):
         await self.run(self.cmd_detect_falling)
-        #await asyncio.sleep(4)
 
         # return the value asynchronously
         future_timestamp.set_result(time.time())
