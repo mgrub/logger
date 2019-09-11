@@ -1,0 +1,9 @@
+[Unit]
+Description=Copy logfile.csv to any USB-drive that is attached to the RPi
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/pi/logger/copy_script.py
+User=pi
+Restart=on-failure
+RestartSec=5
