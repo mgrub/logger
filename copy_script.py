@@ -11,7 +11,7 @@ def main():
     mount_label = "flashdrive"
     mount_point = os.path.join("/media", mount_label)
 
-    orig_logfolder = os.getcwd()
+    orig_logfolder = "/home/pi/logger"
     orig_logfile   = os.path.join(orig_logfolder, "logfile.csv")
 
     dest_logfolder = os.path.join(mount_point, "logs")

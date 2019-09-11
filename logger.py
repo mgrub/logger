@@ -8,7 +8,7 @@ import os
 class Logger():
 
     def __init__(self, BCM_PIN=4):
-        self.logfile = os.path.join(os.getcwd(), "logfile.csv")
+        self.logfile = "/home/pi/logger/logfile.csv"
 
         self.bounce_time = 3  # seconds
 
