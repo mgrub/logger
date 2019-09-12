@@ -1,5 +1,5 @@
 # install git
-sudo apt-get install git
+#sudo apt-get install git
 
 # clone into git repo
 cd /home/pi
