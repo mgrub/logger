@@ -1,4 +1,5 @@
-#sudo apt-get install git
+#sudo apt-get install git pmount
+#pip install pyudev
 
 # manually change the directory of the rootfs, i.e.:
 export ROOTFS=/media/maxwell/rootfs
