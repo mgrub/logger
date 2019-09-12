@@ -1,0 +1,13 @@
+[Unit]
+Description=Detect and log periods of active temperature warning light
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/pi/logger/logger.py
+User=pi
+Group=pi
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
