@@ -1,0 +1,16 @@
+[Unit]
+Description=Execute the script /boot/firstboot.sh exactly once.
+After=network-online.target
+Wants=network-online.target
+ConditionFileNotEmpty=/boot/firstboot.sh
+
+[Service]
+ExecStart=/boot/firstboot.sh
+ExecStartPost=/bin/mv /boot/firstboot.sh /boot/firstboot.sh.done
+Type=oneshot
+RemainAfterExit=no
+User=pi
+Group=pi
+
+[Install]
+WantedBy=multi-user.target
