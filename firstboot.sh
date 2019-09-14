@@ -1,8 +1,8 @@
-#/bin/bash
+#!/bin/bash
 
 # install dependecies
 sudo apt-get update
-sudo apt-get install git pmount python3 python3-pip
+sudo apt-get -y install git pmount python3 python3-pip
 pip3 install pyudev
 
 # setup time
