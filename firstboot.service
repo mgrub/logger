@@ -1,12 +1,12 @@
 [Unit]
-Description=Execute the script /boot/firstboot.sh exactly once.
+Description=Execute /boot/firstboot.sh exactly once.
 After=network-online.target
 Wants=network-online.target
-ConditionFileNotEmpty=/boot/firstboot.sh
+ConditionPathExists=/home/pi/logger/firstboot.sh.done
 
 [Service]
-ExecStart=/boot/firstboot.sh
-ExecStartPost=/bin/mv /boot/firstboot.sh /boot/firstboot.sh.done
+ExecStart=/bin/bash /home/pi/logger/firstboot.sh
+ExecStartPost=echo $(date --utc) > /home/pi/logger/firstboot.sh.done
 Type=oneshot
 RemainAfterExit=no
 User=pi
