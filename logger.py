@@ -9,6 +9,7 @@ class Logger():
 
     def __init__(self, BCM_PIN=4):
         self.logfile = "/home/pi/logger/logfile.csv"
+        self.init_logfile()
 
         self.bounce_time = 3  # seconds
 
@@ -20,12 +21,12 @@ class Logger():
         self.PIN = BCM_PIN
 
         # bare gpio-cli commands (-g --> use BCM-numbers)
-        self.cmd_enable_read    = "gpio -g mode {PIN} down".format(PIN=self.PIN)  # input/output/up/down/tri
+        self.cmd_enable_read    = "gpio -g mode {PIN} down".format(PIN=self.PIN)   # input/output/up/down/tri
         self.cmd_detect_rising  = "gpio -g wfi {PIN} rising".format(PIN=self.PIN)  # rising/falling/both
         self.cmd_detect_falling = "gpio -g wfi {PIN} falling".format(PIN=self.PIN)
         self.cmd_detect_both    = "gpio -g wfi {PIN} both".format(PIN=self.PIN)
         self.cmd_current_state  = "gpio -g read {PIN}".format(PIN=self.PIN)
-        
+    
 
     async def on_rising_edge(self, timestamp):
         tmp = self.last_rising_edge
@@ -66,13 +67,27 @@ class Logger():
                 self.write_to_logfile("AN", timestamp)
 
 
+    def init_logfile(self):
+        # init the file with a header
+        if not os.path.exists(self.logfile):
+            logtext = "DATE (UTC)\tTIME (UTC)\tWARN\n"
+            f = open(self.logfile, "w")
+            f.write(logtext)
+            f.close()
+            
+
     def write_to_logfile(self, text, timestamp):
 
         # human readable time, should be in local time
-        timestring = datetime.datetime.fromtimestamp(timestamp).astimezone().isoformat()
+        #timestring = datetime.datetime.fromtimestamp(timestamp).astimezone().isoformat()
+
+        # human readable date + time, in UTC
+        d = datetime.datetime.utcfromtimestamp(timestamp)
+        ts_date = d.strftime("%Y-%m-%d")
+        ts_time = d.strftime("%H-%M-%S")
 
         # combine information into a single string
-        logtext = "{TS}, {TIME}, {TXT}\n".format(TXT=text, TIME=timestring, TS=timestamp)
+        logtext = "{DATE}\t{TIME}\t{TXT}\n".format(TXT=text, DATE=ts_date, TIME=ts_time)
 
         print(logtext)
         f = open(self.logfile, "a")
