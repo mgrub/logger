@@ -2,7 +2,7 @@
 Description=Configure the RPi by executing a script.
 After=network-online.target
 Wants=network-online.target
-ConditionPathExists=/home/pi/logger/firstboot.sh.done
+ConditionPathExists=!/home/pi/logger/firstboot.sh.done
 
 [Service]
 ExecStart=/bin/bash /home/pi/logger/firstboot.sh
