@@ -19,6 +19,3 @@ sudo cp logger_usb_copy.service /etc/systemd/system/
 # enable and start the services
 sudo systemctl enable logger_temp_warn.service --now
 sudo systemctl enable logger_usb_copy.service --now
-
-# reboot to establish all changes
-sudo reboot
