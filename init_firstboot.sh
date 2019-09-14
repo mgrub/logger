@@ -3,6 +3,7 @@
 # It allows to setup the RPi without keyboard/ssh-access.
 
 #### init ####
+CWD=$(pwd)
 
 # new hostname of the RPi
 NEW_NAME="Logger_01"
@@ -22,7 +23,8 @@ LOGGER="$PI_HOME/logger"
 cd $PI_HOME
 if [ -d "$LOGGER" ]; then
   cd $LOGGER
-  git pull origin master
+  #git pull origin master
+  echo "$LOGGER already exists. Assuming it is a git-repo with user-modified content. \nPlease ensure, that firstboot.sh and firstboot.service exist."
 else
   git clone https://github.com/mgrub/logger
 fi
@@ -38,3 +40,5 @@ sudo ln -sf /etc/systemd/system/firstboot.service firstboot.service  # (does the
 # change hostname
 echo $NEW_NAME | sudo tee $ROOTFS/etc/hostname
 sudo sed -i "s/raspberrypi/$NEW_NAME/g" $ROOTFS/etc/hosts
+
+CD $CWD
