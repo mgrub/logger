@@ -1,5 +1,5 @@
 [Unit]
-Description=Execute /boot/firstboot.sh exactly once.
+Description=Configure the RPi by executing a script.
 After=network-online.target
 Wants=network-online.target
 ConditionPathExists=/home/pi/logger/firstboot.sh.done
