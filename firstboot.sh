@@ -15,7 +15,9 @@ cd $HOME/logger
 # copy unit-files
 sudo cp logger_temp_warn.service /etc/systemd/system/
 sudo cp logger_usb_copy.service /etc/systemd/system/
+sudo cp logger_uptime.service /etc/systemd/system/
 
 # enable and start the services
 sudo systemctl enable logger_temp_warn.service --now
 sudo systemctl enable logger_usb_copy.service --now
+sudo systemctl enable logger_uptime.service --now

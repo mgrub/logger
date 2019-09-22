@@ -1,0 +1,13 @@
+[Unit]
+Description=Log the uptime of RPi. Accurate to 10s. 
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/pi/logger/uptime.py
+User=pi
+Group=pi
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
