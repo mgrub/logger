@@ -84,7 +84,7 @@ class Logger():
         # human readable date + time, in UTC
         d = datetime.datetime.utcfromtimestamp(timestamp)
         ts_date = d.strftime("%Y-%m-%d")
-        ts_time = d.strftime("%H-%M-%S")
+        ts_time = d.strftime("%H:%M:%S")
 
         # combine information into a single string
         logtext = "{DATE}\t{TIME}\t{TXT}\n".format(TXT=text, DATE=ts_date, TIME=ts_time)
