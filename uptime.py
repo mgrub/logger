@@ -8,7 +8,6 @@ class loggerUptime():
     def __init__(self):
         # path definitions
         self.logfile = "/home/pi/logger/uptime.csv"
-        self.init_logfile()
         self.interval = 10  # seconds
 
 
@@ -34,6 +33,12 @@ class loggerUptime():
         # combine information into a single string
         logtext = "{DATE}\t{TIME}\t{TXT}\n".format(TXT=text, DATE=ts_date, TIME=ts_time)
 
+        # re-initizalize the file if necessary
+        if not os.path.exists(self.logfile):
+            self.init_logfile()
+
+        # write to file (seems complicated, but this way only the last line 
+        # is touched, instead of a full rewrite of the file.)
         print(logtext)
 
         if overwriteLastLine:
@@ -72,6 +77,7 @@ class loggerUptime():
         f = open(self.logfile, "a")
         f.write(logtext)
         f.close()
+
 
     def main(self):
         # write down power-on

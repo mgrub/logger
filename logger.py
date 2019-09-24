@@ -9,7 +9,6 @@ class Logger():
 
     def __init__(self, BCM_PIN=4):
         self.logfile = "/home/pi/logger/logfile.csv"
-        self.init_logfile()
 
         self.bounce_time = 3  # seconds
 
@@ -89,6 +88,11 @@ class Logger():
         # combine information into a single string
         logtext = "{DATE}\t{TIME}\t{TXT}\n".format(TXT=text, DATE=ts_date, TIME=ts_time)
 
+        # re-initizalize the file if necessary
+        if not os.path.exists(self.logfile):
+            self.init_logfile()
+
+        # write to file
         print(logtext)
         f = open(self.logfile, "a")
         f.write(logtext)
