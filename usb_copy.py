@@ -56,6 +56,7 @@ def main():
                         os.mkdir(archive)
 
                     # move logfiles into archive
+                    # TODO: maybe keep the first lines of these files
                     shutil.move(orig_logfile, archive_logfile.format(DATE=date))
                     shutil.move(orig_uptime, archive_uptime.format(DATE=date))
 
