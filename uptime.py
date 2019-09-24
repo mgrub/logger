@@ -10,6 +10,7 @@ class loggerUptime():
         self.logfile = "/home/pi/logger/uptime.csv"
         self.interval = 10  # seconds
 
+        self.init_logfile()
 
     def init_logfile(self):
         # init the file with a header

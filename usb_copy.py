@@ -52,7 +52,7 @@ def main():
                     subprocess.call(['pumount', mount_label])
 
                     # create archive-folder if necessary
-                    if not os.path.exists(archive)
+                    if not os.path.exists(archive):
                         os.mkdir(archive)
 
                     # move logfiles into archive
