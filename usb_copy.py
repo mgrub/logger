@@ -11,11 +11,17 @@ def main():
     mount_label = "flashdrive"
     mount_point = os.path.join("/media", mount_label)
 
-    orig_logfolder = "/home/pi/logger"
-    orig_logfile   = os.path.join(orig_logfolder, "logfile.csv")
+    orig_logfolder  = "/home/pi/logger"
+    orig_logfile    = os.path.join(orig_logfolder, "logfile.csv")
+    orig_uptime     = os.path.join(orig_logfolder, "uptime.csv")
 
-    dest_logfolder = os.path.join(mount_point, "logs")
-    dest_logfile   = os.path.join(dest_logfolder, "log_{DATE}.csv")
+    dest_logfolder  = os.path.join(mount_point, "logs")
+    dest_logfile    = os.path.join(dest_logfolder, "log_{DATE}.csv")
+    dest_uptime     = os.path.join(dest_logfolder, "uptime_{DATE}.csv")
+
+    archive         = os.path.join(orig_logfolder, "archive")
+    archive_logfile = os.path.join(archive, "log_{DATE}.csv")
+    archive_uptime  = os.path.join(archive, "uptime_{DATE}.csv")
 
     try: 
         # monitor kernel for block-device messages
@@ -30,19 +36,28 @@ def main():
 
                 if device.action == "add":
 
-                    # mount the block-device
+                    # mount the block-devicea (pmount to mount without admin-rights)
                     subprocess.call(['pmount', device.device_node, mount_label])
 
-                    # create folder if necessary
+                    # create destination-folder if necessary
                     if not os.path.exists(dest_logfolder):
                         os.mkdir(dest_logfolder)
 
-                    # copy file
+                    # copy files
                     date = datetime.datetime.now().strftime("%Y_%m_%d__%H_%M_%S")
                     shutil.copy(orig_logfile, dest_logfile.format(DATE=date))
+                    shutil.copy(orig_uptime, dest_uptime.format(DATE=date))
 
                     # unmount device
                     subprocess.call(['pumount', mount_label])
+
+                    # create archive-folder if necessary
+                    if not os.path.exists(archive)
+                        os.mkdir(archive)
+
+                    # move logfiles into archive
+                    shutil.move(orig_logfile, archive_logfile.format(DATE=date))
+                    shutil.move(orig_uptime, archive_uptime.format(DATE=date))
 
     except KeyboardInterrupt:
         print("Exiting. May leave mounted drives behind.")
