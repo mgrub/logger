@@ -33,10 +33,6 @@ class loggerUptime():
         # combine information into a single string
         logtext = "{DATE}\t{TIME}\t{TXT}\n".format(TXT=text, DATE=ts_date, TIME=ts_time)
 
-        # re-initizalize the file if necessary
-        if not os.path.exists(self.logfile):
-            self.init_logfile()
-
         # write to file (seems complicated, but this way only the last line 
         # is touched, instead of a full rewrite of the file.)
         print(logtext)
@@ -88,6 +84,12 @@ class loggerUptime():
         # (so that the most recent line will persist in case of power-off)
         while True:
             time.sleep(self.interval)
+
+            # re-initizalize the file if necessary
+            if not os.path.exists(self.logfile):
+                self.init_logfile()
+                self.write_to_logfile("POWER OFF", time.time())
+
             self.write_to_logfile("POWER OFF", time.time(), overwriteLastLine=True)
 
 
