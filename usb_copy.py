@@ -45,8 +45,9 @@ def main():
 
                     # copy files
                     date = datetime.datetime.now().strftime("%Y_%m_%d__%H_%M_%S")
-                    shutil.copy(orig_logfile, dest_logfile.format(DATE=date))
-                    shutil.copy(orig_uptime, dest_uptime.format(DATE=date))
+                    _ = shutil.copy(orig_logfile, dest_logfile.format(DATE=date))
+                    _ = shutil.copy(orig_uptime, dest_uptime.format(DATE=date))
+                    #time.sleep(0.1)  # allow the copy process to finishi before unmounting (quick'n'dirty)
 
                     # unmount device
                     subprocess.call(['pumount', mount_label])
