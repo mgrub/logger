@@ -39,7 +39,7 @@ def main():
                     
                     # umount the probably automounted 
                     time.sleep(1)  # give OS time to automount
-                    subprocess.call(['sudo umount', device.device_node])
+                    subprocess.call(['sudo', 'umount', device.device_node])
 
                     # mount the block-device (pmount to mount without admin-rights)
                     subprocess.call(['pmount', device.device_node, mount_label])
