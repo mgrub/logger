@@ -36,8 +36,12 @@ def main():
                 print('{0} partition {1} at {2}'.format(device.action, device.get('ID_FS_LABEL'), device.device_node))        
 
                 if device.action == "add":
+                    
+                    # umount the probably automounted 
+                    time.sleep(1)  # give OS time to automount
+                    subprocess.call(['sudo umount', device.device_node])
 
-                    # mount the block-devicea (pmount to mount without admin-rights)
+                    # mount the block-device (pmount to mount without admin-rights)
                     subprocess.call(['pmount', device.device_node, mount_label])
 
                     # create destination-folder if necessary
@@ -51,7 +55,7 @@ def main():
                     time.sleep(0.1)  # allow the copy process to finishi before unmounting (quick'n'dirty)
 
                     # unmount device
-                    subprocess.call(['pumount', mount_label])
+                    subprocess.call(['pumount', device.device_node])
 
                     # create archive-folder if necessary
                     if not os.path.exists(archive):
