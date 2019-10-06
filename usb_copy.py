@@ -57,15 +57,21 @@ def main():
                     if not os.path.exists(dest_logfolder):
                         os.mkdir(dest_logfolder)
 
-                    # copy files
+                    # create archive-folder if necessary
+                    if not os.path.exists(archive):
+                        os.mkdir(archive)
+
+                    # copy + archivate files
                     date = datetime.datetime.utcnow().strftime("%Y_%m_%d__%H_%M_%S")
                     if os.path.exists(orig_logfile):
                         shutil.copy(orig_logfile, dest_logfile.format(DATE=date))
+                        shutil.move(orig_logfile, archive_logfile.format(DATE=date))
                     else:
                         print("no logfile.csv")
 
                     if os.path.exists(orig_uptime):
                         shutil.copy(orig_uptime, dest_uptime.format(DATE=date))
+                        shutil.move(orig_uptime, archive_uptime.format(DATE=date))
                     else:
                         print("no uptime.csv")
 
@@ -73,13 +79,6 @@ def main():
                     if not automount:
                         subprocess.run(['pumount', device.device_node])
 
-                    # create archive-folder if necessary
-                    if not os.path.exists(archive):
-                        os.mkdir(archive)
-
-                    # move logfiles into archive
-                    shutil.move(orig_logfile, archive_logfile.format(DATE=date))
-                    shutil.move(orig_uptime, archive_uptime.format(DATE=date))
 
     except KeyboardInterrupt:
         print("Exiting. May leave mounted drives behind.")
