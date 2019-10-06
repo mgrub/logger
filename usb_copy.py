@@ -44,7 +44,7 @@ def main():
                     stdout = p.stdout.decode("utf-8").replace("\n", "")  # p.stdout is byte-string with linebreaks
 
                     if stdout is not "":
-                        print(p.stdout + "already mounted")
+                        print(stdout + " already mounted")
                         automount = True
                         mount_point = stdout
 
