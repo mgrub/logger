@@ -36,13 +36,21 @@ def main():
                 print('{0} partition {1} at {2}'.format(device.action, device.get('ID_FS_LABEL'), device.device_node))        
 
                 if device.action == "add":
-                    
-                    # umount the probably automounted 
+                    automount = False
                     time.sleep(1)  # give OS time to automount
-                    subprocess.call(['sudo', 'umount', device.device_node])
+                    
+                    # check if device is already auto-mounted
+                    p = subprocess.run(['lsblk', '-o', 'MOUNTPOINT', '-nr',  device.device_node], stdout=subprocess.PIPE)
+                    stdout = p.stdout.decode("utf-8").replace("\n", "")  # p.stdout is byte-string with linebreaks
+
+                    if stdout is not "":
+                        print(p.stdout + "already mounted")
+                        automount = True
+                        mount_point = stdout
 
                     # mount the block-device (pmount to mount without admin-rights)
-                    subprocess.call(['pmount', device.device_node, mount_label])
+                    if not automount:
+                        subprocess.run(['pmount', device.device_node, mount_label])
 
                     # create destination-folder if necessary
                     if not os.path.exists(dest_logfolder):
@@ -52,10 +60,10 @@ def main():
                     date = datetime.datetime.now().strftime("%Y_%m_%d__%H_%M_%S")
                     shutil.copy(orig_logfile, dest_logfile.format(DATE=date))
                     shutil.copy(orig_uptime, dest_uptime.format(DATE=date))
-                    time.sleep(0.1)  # allow the copy process to finishi before unmounting (quick'n'dirty)
 
                     # unmount device
-                    subprocess.call(['pumount', device.device_node])
+                    if not automount:
+                        subprocess.run(['pumount', device.device_node])
 
                     # create archive-folder if necessary
                     if not os.path.exists(archive):
