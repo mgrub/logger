@@ -58,9 +58,16 @@ def main():
                         os.mkdir(dest_logfolder)
 
                     # copy files
-                    date = datetime.datetime.now().strftime("%Y_%m_%d__%H_%M_%S")
-                    shutil.copy(orig_logfile, dest_logfile.format(DATE=date))
-                    shutil.copy(orig_uptime, dest_uptime.format(DATE=date))
+                    date = datetime.datetime.utcnow().strftime("%Y_%m_%d__%H_%M_%S")
+                    if os.path.exists(orig_logfile):
+                        shutil.copy(orig_logfile, dest_logfile.format(DATE=date))
+                    else:
+                        print("no logfile.csv")
+
+                    if os.path.exists(orig_uptime):
+                        shutil.copy(orig_uptime, dest_uptime.format(DATE=date))
+                    else:
+                        print("no uptime.csv")
 
                     # unmount device
                     if not automount:
@@ -71,7 +78,6 @@ def main():
                         os.mkdir(archive)
 
                     # move logfiles into archive
-                    # TODO: maybe keep the first lines of these files
                     shutil.move(orig_logfile, archive_logfile.format(DATE=date))
                     shutil.move(orig_uptime, archive_uptime.format(DATE=date))
 
