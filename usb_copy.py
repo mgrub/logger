@@ -9,16 +9,9 @@ import sys
 def main():
 
     # path definitions
-    mount_label = "flashdrive"
-    mount_point = os.path.join("/media", mount_label)
-
     orig_logfolder  = "/home/pi/logger"
     orig_logfile    = os.path.join(orig_logfolder, "logfile.csv")
     orig_uptime     = os.path.join(orig_logfolder, "uptime.csv")
-
-    dest_logfolder  = os.path.join(mount_point, "logs")
-    dest_logfile    = os.path.join(dest_logfolder, "log_{DATE}.csv")
-    dest_uptime     = os.path.join(dest_logfolder, "uptime_{DATE}.csv")
 
     archive         = os.path.join(orig_logfolder, "archive")
     archive_logfile = os.path.join(archive, "log_{DATE}.csv")
@@ -47,6 +40,14 @@ def main():
                         print(stdout + " already mounted")
                         automount = True
                         mount_point = stdout
+                    else:
+                        mount_label = "flashdrive"
+                        mount_point = os.path.join("/media", mount_label)
+
+                    # define paths on the usb-device
+                    dest_logfolder = os.path.join(mount_point, "logs")
+                    dest_logfile   = os.path.join(dest_logfolder, "log_{DATE}.csv")
+                    dest_uptime    = os.path.join(dest_logfolder, "uptime_{DATE}.csv")
 
                     # mount the block-device (pmount to mount without admin-rights)
                     if not automount:
