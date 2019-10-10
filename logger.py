@@ -50,6 +50,7 @@ class Logger():
         if (timestamp == self.last_falling_edge) and (tmp == self.last_rising_edge):
             self.write_to_logfile("AUS\n", timestamp)
 
+
     async def on_edge(self, timestamp):
         tmp = self.last_edge
         self.last_edge = timestamp
@@ -183,8 +184,8 @@ async def main():
 
     while True:
             start_next_cycle = loop.create_future()
-            loop.create_task(logger.detection_cycle_blink(loop, start_next_cycle))
-            #loop.create_task(logger.detection_cycle_steady(loop, start_next_cycle))
+            #loop.create_task(logger.detection_cycle_blink(loop, start_next_cycle))
+            loop.create_task(logger.detection_cycle_steady(loop, start_next_cycle))
 
             await start_next_cycle
 
