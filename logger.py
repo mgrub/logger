@@ -184,8 +184,8 @@ async def main():
 
     while True:
             start_next_cycle = loop.create_future()
-            #loop.create_task(logger.detection_cycle_blink(loop, start_next_cycle))
-            loop.create_task(logger.detection_cycle_steady(loop, start_next_cycle))
+            loop.create_task(logger.detection_cycle_blink(loop, start_next_cycle))
+            #loop.create_task(logger.detection_cycle_steady(loop, start_next_cycle))
 
             await start_next_cycle
 
