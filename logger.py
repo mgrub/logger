@@ -48,7 +48,7 @@ class Logger():
         # self.last_falling_edge could have been altered by another call of on_falling_edge in the meantime
         # also check that was no rising-edge in the meantime
         if (timestamp == self.last_falling_edge) and (tmp == self.last_rising_edge):
-            self.write_to_logfile("AUS", timestamp)
+            self.write_to_logfile("AUS\n", timestamp)
 
     async def on_edge(self, timestamp):
         tmp = self.last_edge
@@ -62,7 +62,7 @@ class Logger():
         if (timestamp == self.last_edge):
             current_state = int(await self.run(self.cmd_current_state))
             if current_state == 0:
-                self.write_to_logfile("AUS", timestamp)
+                self.write_to_logfile("AUS\n", timestamp)
             else:
                 self.write_to_logfile("AN", timestamp)
 
